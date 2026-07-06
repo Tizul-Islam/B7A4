@@ -1,8 +1,7 @@
 import app from "./app";
-
 import "dotenv/config";
 
-const PORT = process.env.PORT || 5001;
+const PORT = process.env.PORT;
 
 
 async function main() {
