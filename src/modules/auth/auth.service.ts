@@ -124,8 +124,15 @@ const refreshToken = async (token: string) => {
     { expiresIn: config.jwt_access_expires_in } as SignOptions
   );
 
+  const newRefreshToken = jwtUtils.createToken(
+    jwtPayload,
+    config.jwt_refresh_secret,
+    { expiresIn: config.jwt_refresh_expires_in } as SignOptions
+  );
+
   return {
     accessToken,
+    refreshToken: newRefreshToken,
   };
 };
 

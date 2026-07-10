@@ -48,13 +48,32 @@ const login = catchAsync(async (req: Request, res: Response, next: NextFunction)
 
 const refreshToken = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
   const token = req.cookies?.refreshToken || req.body.refreshToken;
-  const result = await authService.refreshToken(token);
+  const { accessToken, refreshToken: newRefreshToken } = await authService.refreshToken(token);
+  const isProduction = config.node_env === "production";
+
+  // Set cookies
+  res.cookie("accessToken", accessToken, {
+    httpOnly: true,
+    secure: isProduction,
+    sameSite: isProduction ? "none" : "lax",
+    maxAge: 60 * 60 * 1000, // 1 hour
+  });
+
+  res.cookie("refreshToken", newRefreshToken, {
+    httpOnly: true,
+    secure: isProduction,
+    sameSite: isProduction ? "none" : "lax",
+    maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+  });
 
   sendResponse(res, {
     success: true,
     statusCode: httpStatus.OK,
     message: "Access token retrieved successfully",
-    data: result,
+    data: {
+      accessToken,
+      refreshToken: newRefreshToken,
+    },
   });
 });
 
