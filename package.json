@@ -8,9 +8,14 @@
   "main": "server.js",
   "scripts": {
     "dev": "tsx watch src/server.ts",
+    "dev:frontend": "npm run dev --prefix frontend",
     "build": "tsc",
     "start": "node dist/server.ts",
+    "stripe:webhook":"stripe listen --forward-to localhost:5001/api/webhook",
     "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "prisma": {
+    "seed": "tsx prisma/seed.ts"
   },
   "dependencies": {
     "@prisma/adapter-pg": "^7.8.0",
@@ -29,11 +34,17 @@
     "http-status": "^2.1.0",
     "jsonwebtoken": "^9.0.3",
     "pg": "^8.22.0",
+    "stripe": "^22.3.0",
+    "swagger-jsdoc": "^6.3.0",
+    "swagger-ui-express": "^5.0.1",
     "tsx": "^4.23.0",
-    "typescript": "^6.0.3"
+    "typescript": "^6.0.3",
+    "zod": "^4.4.3"
   },
   "devDependencies": {
     "@types/pg": "^8.20.0",
+    "@types/swagger-jsdoc": "^6.0.4",
+    "@types/swagger-ui-express": "^4.1.8",
     "prisma": "^7.8.0"
   }
 }
