@@ -1,7 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { useQuery, useMutation } from '@tanstack/react-query';
-import { Calendar, User, Compass, AlertTriangle } from 'lucide-react';
+import { Compass, AlertTriangle } from 'lucide-react';
 import { api } from '../../api';
 import { useAuth } from '../../context/AuthContext';
 import { StarRating } from '../../components/StarRating';
@@ -221,8 +221,9 @@ export const GearDetails: React.FC = () => {
 
             <form onSubmit={handleBookingSubmit} className="space-y-4">
               <div>
-                <label className="block text-xxs font-black uppercase tracking-wider text-slate-400 mb-2">Start Date</label>
+                <label htmlFor="startDate" className="block text-xxs font-black uppercase tracking-wider text-slate-400 mb-2">Start Date</label>
                 <input
+                  id="startDate"
                   type="date"
                   required
                   className="w-full rounded-xl border border-white/5 bg-slate-950/60 px-4 py-2.5 font-body text-sm text-white focus:border-accentTeal focus:outline-none"
@@ -233,8 +234,9 @@ export const GearDetails: React.FC = () => {
               </div>
 
               <div>
-                <label className="block text-xxs font-black uppercase tracking-wider text-slate-400 mb-2">End Date</label>
+                <label htmlFor="endDate" className="block text-xxs font-black uppercase tracking-wider text-slate-400 mb-2">End Date</label>
                 <input
+                  id="endDate"
                   type="date"
                   required
                   className="w-full rounded-xl border border-white/5 bg-slate-950/60 px-4 py-2.5 font-body text-sm text-white focus:border-accentTeal focus:outline-none"
@@ -245,8 +247,9 @@ export const GearDetails: React.FC = () => {
               </div>
 
               <div>
-                <label className="block text-xxs font-black uppercase tracking-wider text-slate-400 mb-2">Quantity</label>
+                <label htmlFor="quantity" className="block text-xxs font-black uppercase tracking-wider text-slate-400 mb-2">Quantity</label>
                 <input
+                  id="quantity"
                   type="number"
                   required
                   min="1"
