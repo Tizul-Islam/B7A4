@@ -46,7 +46,7 @@ export const Account: React.FC = () => {
   // Update Profile Mutation
   const updateMutation = useMutation({
     mutationFn: (values: ProfileFormValues) => api.users.updateProfile(values),
-    onSuccess: (res) => {
+    onSuccess: () => {
       toast.success('Profile updated successfully!');
       queryClient.invalidateQueries({ queryKey: ['profile'] });
     },
@@ -80,8 +80,9 @@ export const Account: React.FC = () => {
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
           <div className="grid sm:grid-cols-2 gap-4">
             <div>
-              <label className="block text-xxs font-black uppercase tracking-wider text-slate-400 mb-2">Registered Email</label>
+              <label htmlFor="email" className="block text-xxs font-black uppercase tracking-wider text-slate-400 mb-2">Registered Email</label>
               <input
+                id="email"
                 type="text"
                 disabled
                 className="w-full rounded-xl border border-white/5 bg-slate-950/30 px-4 py-2.5 font-body text-sm text-slate-500 focus:outline-none cursor-not-allowed"
@@ -89,8 +90,9 @@ export const Account: React.FC = () => {
               />
             </div>
             <div>
-              <label className="block text-xxs font-black uppercase tracking-wider text-slate-400 mb-2">Role Status</label>
+              <label htmlFor="role" className="block text-xxs font-black uppercase tracking-wider text-slate-400 mb-2">Role Status</label>
               <input
+                id="role"
                 type="text"
                 disabled
                 className="w-full rounded-xl border border-white/5 bg-slate-950/30 px-4 py-2.5 font-body text-sm text-slate-500 focus:outline-none cursor-not-allowed"
@@ -100,8 +102,9 @@ export const Account: React.FC = () => {
           </div>
 
           <div>
-            <label className="block text-xxs font-black uppercase tracking-wider text-slate-400 mb-2">Full Name</label>
+            <label htmlFor="name" className="block text-xxs font-black uppercase tracking-wider text-slate-400 mb-2">Full Name</label>
             <input
+              id="name"
               type="text"
               className="w-full rounded-xl border border-white/5 bg-slate-950/60 px-4 py-2.5 font-body text-sm text-white focus:border-accentTeal focus:outline-none"
               placeholder="Jane Doe"
@@ -112,8 +115,9 @@ export const Account: React.FC = () => {
 
           <div className="grid sm:grid-cols-2 gap-4">
             <div>
-              <label className="block text-xxs font-black uppercase tracking-wider text-slate-400 mb-2">Phone Number</label>
+              <label htmlFor="phone" className="block text-xxs font-black uppercase tracking-wider text-slate-400 mb-2">Phone Number</label>
               <input
+                id="phone"
                 type="text"
                 className="w-full rounded-xl border border-white/5 bg-slate-950/60 px-4 py-2.5 font-body text-sm text-white focus:border-accentTeal focus:outline-none"
                 placeholder="+880..."
@@ -121,8 +125,9 @@ export const Account: React.FC = () => {
               />
             </div>
             <div>
-              <label className="block text-xxs font-black uppercase tracking-wider text-slate-400 mb-2">Billing Address</label>
+              <label htmlFor="address" className="block text-xxs font-black uppercase tracking-wider text-slate-400 mb-2">Billing Address</label>
               <input
+                id="address"
                 type="text"
                 className="w-full rounded-xl border border-white/5 bg-slate-950/60 px-4 py-2.5 font-body text-sm text-white focus:border-accentTeal focus:outline-none"
                 placeholder="Dhaka"
