@@ -14,7 +14,8 @@ export const AdminDashboard: React.FC = () => {
     totalRevenue: 0,
     totalUsers: 0,
     totalGearItems: 0,
-    totalRentals: 0,
+    totalRentalOrders: 0,
+    ordersByStatus: {},
   };
 
   if (isLoading) {
@@ -81,9 +82,50 @@ export const AdminDashboard: React.FC = () => {
           <div>
             <span className="text-xxs font-black uppercase tracking-wider text-slate-500 block">Total Bookings</span>
             <span className="font-display text-2xl font-black text-white mt-1 block">
-              {stats.totalRentals}
+              {stats.totalRentalOrders}
             </span>
           </div>
+        </div>
+      </div>
+
+      {/* Fulfillment Status Distribution */}
+      <div className="rounded-2xl border border-white/5 bg-slate-900/40 p-6 backdrop-blur-md space-y-6">
+        <div>
+          <h2 className="font-display text-lg font-bold text-white">Fulfillment Status Distribution</h2>
+          <p className="text-xs text-slate-400 mt-1">Platform-wide overview of rental lifecycle stages</p>
+        </div>
+
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {(
+            [
+              ['PLACED', 'Placed (Awaiting Confirm)', 'bg-slate-700', 'text-slate-400'],
+              ['CONFIRMED', 'Confirmed (Unpaid)', 'bg-blue-600', 'text-blue-400'],
+              ['PAID', 'Paid (Awaiting Pickup)', 'bg-emerald-600', 'text-emerald-400'],
+              ['PICKED_UP', 'Picked Up (Active Rental)', 'bg-indigo-600', 'text-indigo-400'],
+              ['RETURNED', 'Returned (Completed)', 'bg-teal-600', 'text-teal-400'],
+              ['CANCELLED', 'Cancelled', 'bg-rose-600', 'text-rose-400'],
+            ] as const
+          ).map(([status, label, color, text]) => {
+            const count = stats.ordersByStatus?.[status] || 0;
+            const percentage = stats.totalRentalOrders > 0
+              ? (count / stats.totalRentalOrders) * 100
+              : 0;
+
+            return (
+              <div key={status} className="bg-slate-950/40 border border-white/5 rounded-xl p-4 space-y-3">
+                <div className="flex justify-between items-center text-xs">
+                  <span className="font-bold text-slate-300">{label}</span>
+                  <span className={`font-mono font-black ${text}`}>{count}</span>
+                </div>
+                <div className="w-full bg-slate-900 rounded-full h-2 overflow-hidden border border-white/5">
+                  <div
+                    className={`${color} h-full rounded-full transition-all duration-500`}
+                    style={{ width: `${percentage}%` }}
+                  />
+                </div>
+              </div>
+            );
+          })}
         </div>
       </div>
     </div>
