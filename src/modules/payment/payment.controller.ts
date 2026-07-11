@@ -65,9 +65,29 @@ const getPaymentById = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+const verifyPayment = catchAsync(async (req: Request, res: Response) => {
+  const customerId = req.user!.id;
+  const role = req.user!.role;
+  const { sessionId } = req.body;
+
+  const payment = await paymentService.verifyPaymentSession(
+    customerId,
+    sessionId,
+    role,
+  );
+
+  sendResponse(res, {
+    success: true,
+    statusCode: httpStatus.OK,
+    message: "Payment verified successfully",
+    data: payment,
+  });
+});
+
 export const paymentController = {
   createPayment,
   stripeWebhook,
   getMyPayments,
   getPaymentById,
+  verifyPayment,
 };

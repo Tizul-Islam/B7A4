@@ -42,7 +42,7 @@ export const getGearQuerySchema = z.object({
     brand: z.string().optional(),
     isAvailable: z.string().optional(), // we'll parse this manually in controller
     page: z.coerce.number().int().positive().default(1),
-    limit: z.coerce.number().int().positive().default(10),
+    limit: z.coerce.number().int().positive().max(100, "Limit cannot exceed 100 items per page").default(10),
     sortBy: z.string().default("createdAt"),
     sortOrder: z.enum(["asc", "desc"]).default("desc"),
   }),
