@@ -43,21 +43,28 @@ const createReview = async (customerId: string, payload: any) => {
     throw new AppError(409, "You have already submitted a review for this item and order combination.");
   }
 
-  const review = await prisma.review.create({
-    data: {
-      customerId,
-      rentalOrderId,
-      gearItemId,
-      rating,
-      comment,
-    },
-    include: {
-      customer: { select: { name: true } },
-      gearItem: { select: { name: true } },
-    },
-  });
+  try {
+    const review = await prisma.review.create({
+      data: {
+        customerId,
+        rentalOrderId,
+        gearItemId,
+        rating,
+        comment,
+      },
+      include: {
+        customer: { select: { name: true } },
+        gearItem: { select: { name: true } },
+      },
+    });
 
-  return review;
+    return review;
+  } catch (error: any) {
+    if (error.code === "P2002") {
+      throw new AppError(409, "You have already submitted a review for this item and order combination.");
+    }
+    throw error;
+  }
 };
 
 const getGearReviews = async (gearItemId: string) => {
