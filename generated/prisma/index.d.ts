@@ -10608,6 +10608,7 @@ export namespace Prisma {
 
   export type ReviewWhereUniqueInput = Prisma.AtLeast<{
     id?: string
+    customerId_rentalOrderId_gearItemId?: ReviewCustomerIdRentalOrderIdGearItemIdCompoundUniqueInput
     AND?: ReviewWhereInput | ReviewWhereInput[]
     OR?: ReviewWhereInput[]
     NOT?: ReviewWhereInput | ReviewWhereInput[]
@@ -10620,7 +10621,7 @@ export namespace Prisma {
     customer?: XOR<UserScalarRelationFilter, UserWhereInput>
     gearItem?: XOR<GearItemScalarRelationFilter, GearItemWhereInput>
     rentalOrder?: XOR<RentalOrderScalarRelationFilter, RentalOrderWhereInput>
-  }, "id">
+  }, "id" | "customerId_rentalOrderId_gearItemId">
 
   export type ReviewOrderByWithAggregationInput = {
     id?: SortOrder
@@ -11846,6 +11847,12 @@ export namespace Prisma {
     _count?: NestedIntNullableFilter<$PrismaModel>
     _min?: NestedDateTimeNullableFilter<$PrismaModel>
     _max?: NestedDateTimeNullableFilter<$PrismaModel>
+  }
+
+  export type ReviewCustomerIdRentalOrderIdGearItemIdCompoundUniqueInput = {
+    customerId: string
+    rentalOrderId: string
+    gearItemId: string
   }
 
   export type ReviewCountOrderByAggregateInput = {

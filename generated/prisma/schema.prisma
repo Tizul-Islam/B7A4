@@ -163,6 +163,7 @@ model Review {
   gearItem    GearItem    @relation(fields: [gearItemId], references: [id], onDelete: Cascade)
   rentalOrder RentalOrder @relation(fields: [rentalOrderId], references: [id], onDelete: Cascade)
 
+  @@unique([customerId, rentalOrderId, gearItemId])
   @@index([gearItemId])
   @@map("reviews")
 }
