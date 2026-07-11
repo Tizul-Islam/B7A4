@@ -436,7 +436,7 @@ const swaggerOptions: swaggerJSDoc.Options = {
         post: {
           summary: "Public webhook to verify Stripe payments",
           tags: ["Payments"],
-          security: [],
+          security: [], 
           responses: {
             200: { description: "Webhook received" },
           },
