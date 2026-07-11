@@ -1,59 +1,73 @@
-import { Request, Response, NextFunction } from "express";
+import { Request, Response } from "express";
 import httpStatus from "http-status";
-import { paymentService } from "./payment.service.js";
-import { sendResponse } from "../../utils/sendResponse.js";
-import { catchAsync } from "../../utils/catchAsync.js";
+import { catchAsync } from "../../utils/catchAsync";
+import { sendResponse } from "../../utils/sendResponse";
+import { paymentService } from "./payment.service";
 
-const createPaymentIntent = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
-  const customerId = req.user?.id as string;
-  const result = await paymentService.createPaymentIntent(customerId, req.body);
+const createPayment = catchAsync(async (req: Request, res: Response) => {
+  const customerId = req.user!.id;
+  const role = req.user!.role;
+  const result = await paymentService.createPaymentSession(
+    customerId,
+    role,
+    req.body,
+  );
 
   sendResponse(res, {
     success: true,
     statusCode: httpStatus.CREATED,
-    message: "Payment initialized successfully",
+    message: "Payment session created successfully",
     data: result,
   });
 });
 
-const confirmPaymentWebhook = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+// Stripe needs the raw body for signature verification, so this handler
+// does NOT use sendResponse (which assumes JSON was already parsed) —
+// it just acknowledges receipt directly.
+const stripeWebhook = catchAsync(async (req: Request, res: Response) => {
   const signature = req.headers["stripe-signature"] as string;
-  const result = await paymentService.confirmPaymentWebhook((req as any).rawBody, signature);
-
-  // Send direct response since this is a public webhook called by Stripe
+  const rawBody = (req as any).rawBody as Buffer;
+  const result = await paymentService.handleStripeWebhook(rawBody, signature);
   res.status(200).json(result);
 });
 
-const getPaymentHistory = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
-  const userId = req.user?.id as string;
-  const role = req.user?.role as string;
-  const result = await paymentService.getPaymentHistory(userId, role);
+const getMyPayments = catchAsync(async (req: Request, res: Response) => {
+  const customerId = req.user!.id;
+  const { payments, meta } = await paymentService.getMyPayments(
+    customerId,
+    req.query as any,
+  );
 
   sendResponse(res, {
     success: true,
     statusCode: httpStatus.OK,
-    message: "Payment history retrieved successfully",
-    data: result,
+    message: "Payments fetched successfully",
+    data: payments,
+    meta,
   });
 });
 
-const getPaymentDetails = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
-  const { id } = req.params as { id: string };
-  const userId = req.user?.id as string;
-  const role = req.user?.role as string;
-  const result = await paymentService.getPaymentDetails(id, userId, role);
+const getPaymentById = catchAsync(async (req: Request, res: Response) => {
+  const customerId = req.user!.id;
+  const role = req.user!.role;
+  const { id } = req.params;
+  const payment = await paymentService.getPaymentById(
+    customerId,
+    id as string,
+    role,
+  );
 
   sendResponse(res, {
     success: true,
     statusCode: httpStatus.OK,
-    message: "Payment details retrieved successfully",
-    data: result,
+    message: "Payment fetched successfully",
+    data: payment,
   });
 });
 
 export const paymentController = {
-  createPaymentIntent,
-  confirmPaymentWebhook,
-  getPaymentHistory,
-  getPaymentDetails,
+  createPayment,
+  stripeWebhook,
+  getMyPayments,
+  getPaymentById,
 };
