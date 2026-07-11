@@ -77,6 +77,8 @@ export const DataTable: React.FC<DataTableProps> = ({
           <div className="flex items-center gap-1">
             <button
               type="button"
+              title="Previous Page"
+              aria-label="Previous Page"
               className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-white/5 bg-slate-950 text-slate-400 transition-colors hover:bg-slate-900 hover:text-white disabled:pointer-events-none disabled:opacity-30"
               disabled={pagination.page <= 1}
               onClick={() => pagination.onPageChange(pagination.page - 1)}
@@ -105,6 +107,8 @@ export const DataTable: React.FC<DataTableProps> = ({
 
             <button
               type="button"
+              title="Next Page"
+              aria-label="Next Page"
               className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-white/5 bg-slate-950 text-slate-400 transition-colors hover:bg-slate-900 hover:text-white disabled:pointer-events-none disabled:opacity-30"
               disabled={pagination.page >= pagination.totalPages}
               onClick={() => pagination.onPageChange(pagination.page + 1)}
