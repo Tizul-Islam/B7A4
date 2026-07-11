@@ -224,9 +224,64 @@ const getPaymentById = async (customerId: string, id: string, role: string) => {
   return payment;
 };
 
+const verifyPaymentSession = async (
+  customerId: string,
+  sessionId: string,
+  role: string,
+) => {
+  const payment = await prisma.payment.findUnique({
+    where: { transactionId: sessionId },
+    include: {
+      rentalOrder: true,
+    },
+  });
+
+  if (!payment) {
+    throw new AppError(404, "Payment record not found.");
+  }
+
+  if (payment.rentalOrder.customerId !== customerId && role !== "ADMIN") {
+    throw new AppError(403, "You do not have access to this payment.");
+  }
+
+  if (!stripe) {
+    if (config.node_env === "development") {
+      console.warn("Stripe is not configured. Automatically completing payment in development mode.");
+      await markPaymentCompleted(sessionId);
+      const updatedPayment = await prisma.payment.findUnique({
+        where: { id: payment.id },
+        include: { rentalOrder: true },
+      });
+      return updatedPayment;
+    }
+    throw new AppError(500, "Stripe is not configured.");
+  }
+
+  const session = await stripe.checkout.sessions.retrieve(sessionId);
+  if (!session) {
+    throw new AppError(404, "Stripe checkout session not found.");
+  }
+
+  if (session.payment_status === "paid") {
+    await markPaymentCompleted(sessionId);
+  } else if (session.status === "expired") {
+    await markPaymentFailed(sessionId);
+  }
+
+  const updatedPayment = await prisma.payment.findUnique({
+    where: { id: payment.id },
+    include: {
+      rentalOrder: true,
+    },
+  });
+
+  return updatedPayment;
+};
+
 export const paymentService = {
   createPaymentSession,
   handleStripeWebhook,
   getMyPayments,
   getPaymentById,
+  verifyPaymentSession,
 };
