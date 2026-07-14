@@ -16,8 +16,8 @@ const createReview = async (customerId: string, payload: any) => {
     throw new AppError(403, "You do not have permission to review items from this order.");
   }
 
-  if (order.status !== "RETURNED") {
-    throw new AppError(400, "You can only submit a review after the gear has been returned.");
+  if (!["PICKED_UP", "RETURNED"].includes(order.status)) {
+    throw new AppError(400, "You can only submit a review after the gear has been picked up or returned.");
   }
 
   const hasItem = await prisma.rentalOrderItem.findFirst({

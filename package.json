@@ -8,7 +8,7 @@
   "main": "server.js",
   "scripts": {
     "dev": "tsx watch src/server.ts",
-    "dev:frontend": "npm run dev --prefix frontend",
+    "dev:frontend": "npm run dev --prefix gearup-frontend",
     "build": "tsc",
     "start": "node dist/server.ts",
     "stripe:webhook":"stripe listen --forward-to localhost:5001/api/webhook",

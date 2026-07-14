@@ -3,6 +3,7 @@ import { ZodError } from "zod";
 import config from "../config/index.js";
 
 export const globalErrorHandler: ErrorRequestHandler = (err, req, res, next) => {
+  console.error("[Global Error Handler] Caught error:", err);
   let statusCode = err.statusCode || 500;
   let message = err.message || "Something went wrong";
   let errorSource: { path: string; message: string }[] = err.errorSource || [];
@@ -16,6 +17,8 @@ export const globalErrorHandler: ErrorRequestHandler = (err, req, res, next) => 
       message: issue.message,
     }));
   }
+
+  
 
   // Handle Prisma Database Errors (Prisma Client returns errors with code)
   if (err.code) {
