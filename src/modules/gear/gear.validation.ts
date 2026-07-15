@@ -40,6 +40,7 @@ export const getGearQuerySchema = z.object({
     minPrice: z.coerce.number().optional(),
     maxPrice: z.coerce.number().optional(),
     brand: z.string().optional(),
+    providerId: z.string().uuid("Invalid provider ID format").optional(),
     isAvailable: z.string().optional(), // we'll parse this manually in controller
     page: z.coerce.number().int().positive().default(1),
     limit: z.coerce.number().int().positive().max(100, "Limit cannot exceed 100 items per page").default(10),

@@ -58,30 +58,7 @@ async function main() {
       name: "Running",
       description: "Running shoes, hydration gear, fitness trackers and apparel"
     },
-    {
-      name: "Fishing",
-      description: "Fishing rods, reels, tackle boxes, bait and outdoor accessories"
-    },
-    {
-      name: "Golf",
-      description: "Golf clubs, balls, bags, gloves and practice equipment"
-    },
-    {
-      name: "Boxing",
-      description: "Boxing gloves, punching bags, wraps and protective gear"
-    },
-    {
-      name: "Volleyball",
-      description: "Volleyballs, nets, knee pads and court accessories"
-    },
-    {
-      name: "Badminton",
-      description: "Badminton rackets, shuttlecocks, nets and sports apparel"
-    },
-    {
-      name: "Skateboarding",
-      description: "Skateboards, helmets, pads and riding accessories"
-    }
+   
   ];
  
   for (const cat of categories) {

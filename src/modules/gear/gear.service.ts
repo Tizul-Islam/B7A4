@@ -55,8 +55,12 @@ const getGearList = async (queryParams: any) => {
   }
 
   if (isAvailable !== undefined) {
-    const availableBool = isAvailable === "true";
+    const availableBool = isAvailable === "true" || isAvailable === true;
     where.isAvailable = availableBool;
+  }
+
+  if (queryParams.providerId) {
+    where.providerId = queryParams.providerId;
   }
 
   const [total, gearItems] = await prisma.$transaction([

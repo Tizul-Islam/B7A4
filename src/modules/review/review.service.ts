@@ -3,10 +3,13 @@ import { prisma } from "../../lib/prisma.js";
 
 const createReview = async (customerId: string, payload: any) => {
   const { rentalOrderId, gearItemId, rating, comment } = payload;
+  console.log("createReview CALLED:", { customerId, payload });
 
   const order = await prisma.rentalOrder.findUnique({
     where: { id: rentalOrderId },
   });
+
+  console.log("createReview FIND_UNIQUE RESULT:", order);
 
   if (!order) {
     throw new AppError(404, "Rental order not found.");
