@@ -1,12 +1,18 @@
-import "dotenv/config";
+import pg from "pg";
 import { PrismaPg } from "@prisma/adapter-pg";
-import { PrismaClient } from "@prisma/client/extension";
+import { PrismaClient } from "../../generated/prisma/index.js";
+import config from "../config/index.js";
 
+const cleanConnectionString = config.databaseUrl?.split("?")[0];
 
+const pool = new pg.Pool({
+  connectionString: cleanConnectionString,
+  ssl: {
+    rejectUnauthorized: false,
+  },
+});
 
-const connectionString = `${process.env.DATABASE_URL}`;
+const adapter = new PrismaPg(pool);
 
-const adapter = new PrismaPg({ connectionString });
-const prisma = new PrismaClient({ adapter });
-
-export { prisma };
+// Pass the pg adapter to PrismaClient
+export const prisma = new PrismaClient({ adapter } as any);
